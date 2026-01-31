@@ -83,5 +83,5 @@ if __name__ == '__main__':
             
         # After retraining the model
         model_version = f'model_{timestamp}'  # Use a timestamp as the version
-        model_filename = os.path.join('models', f'{model_version}_dt_model.joblib')
+        model_filename = f'{model_version}_dt_model.joblib'  # Changed filename
         dump(lgbm_model, model_filename)

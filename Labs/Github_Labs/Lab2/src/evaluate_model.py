@@ -14,11 +14,8 @@ if __name__=='__main__':
     # Access the timestamp
     timestamp = args.timestamp
     try:
-        model_filename = os.path.join('models', f'model_{timestamp}_dt_model.joblib')
-        if not os.path.exists(model_filename):
-            raise ValueError(f"Failed to find the latest model: {model_filename}")
-
-        model = joblib.load(model_filename)
+        model_version = f'model_{timestamp}_dt_model'  # Use a timestamp as the version
+        model = joblib.load(f'{model_version}.joblib')
     except:
         raise ValueError('Failed to catching the latest model')
         
