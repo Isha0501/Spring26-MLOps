@@ -65,15 +65,15 @@ if __name__ == '__main__':
         mlflow.log_params(params)
             
         # Implementing LGBM instead of Random Forest
-        forest = LGBMClassifier(
+        lgbm_model = LGBMClassifier(
             random_state=0,
             n_estimators=100,  
             learning_rate=0.1,
             verbose=-1  
         )
-
-        forest.fit(X, y)
-        y_predict = forest.predict(X)
+        lgbm_model.fit(X, y)
+        
+        y_predict = lgbm_model.predict(X)
         mlflow.log_metrics({'Accuracy': accuracy_score(y, y_predict),
                             'F1 Score': f1_score(y, y_predict)})
         
@@ -83,5 +83,5 @@ if __name__ == '__main__':
             
         # After retraining the model
         model_version = f'model_{timestamp}'  # Use a timestamp as the version
-        model_filename = f'{model_version}_lgbm_model.joblib'  # Changed filename
-        dump(forest, model_filename)
+        model_filename = os.path.join('models', f'{model_version}_dt_model.joblib')
+        dump(lgbm_model, model_filename)
