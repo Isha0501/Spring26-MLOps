@@ -72,7 +72,7 @@ if __name__ == '__main__':
             verbose=-1  
         )
 
-        
+        lgbm_model.fit(X, y)
         y_predict = lgbm_model.predict(X)
         mlflow.log_metrics({'Accuracy': accuracy_score(y, y_predict),
                             'F1 Score': f1_score(y, y_predict)})
