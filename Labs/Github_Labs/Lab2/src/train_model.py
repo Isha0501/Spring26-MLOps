@@ -5,7 +5,7 @@ from joblib import dump
 from sklearn.datasets import make_classification
 from sklearn.metrics import accuracy_score, f1_score
 import sys
-from sklearn.ensemble import RandomForestClassifier
+from lightgbm import LGBMClassifier  # Changed import
 import argparse
 
 sys.path.insert(0, os.path.abspath('..'))
@@ -64,11 +64,16 @@ if __name__ == '__main__':
         
         mlflow.log_params(params)
             
+        # Implementing LGBM instead of Random Forest
+        lgbm_model = LGBMClassifier(
+            random_state=0,
+            n_estimators=100,  
+            learning_rate=0.1,
+            verbose=-1  
+        )
+        lgbm_model.fit(X, y) 
         
-        forest = RandomForestClassifier(random_state=0)
-        forest.fit(X, y)
-        
-        y_predict = forest.predict(X)
+        y_predict = lgbm_model.predict(X)
         mlflow.log_metrics({'Accuracy': accuracy_score(y, y_predict),
                             'F1 Score': f1_score(y, y_predict)})
         
@@ -78,7 +83,5 @@ if __name__ == '__main__':
             
         # After retraining the model
         model_version = f'model_{timestamp}'  # Use a timestamp as the version
-        model_filename = f'{model_version}_dt_model.joblib'
-        dump(forest, model_filename)
-                    
-
+        model_filename = f'{model_version}_lgbm_model.joblib'  # Changed filename
+        dump(lgbm_model, model_filename)
